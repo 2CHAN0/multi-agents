@@ -24,4 +24,8 @@ python-dotenv>=1.0.0
 
 # YAML 파싱 (AGENT.md frontmatter)
 pyyaml>=6.0.0
+
+# Finance Data
+yfinance>=0.2.0
+
 pydantic>=2.0.0

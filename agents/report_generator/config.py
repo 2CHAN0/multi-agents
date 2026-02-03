@@ -72,7 +72,10 @@ def get_skills_paths() -> list[str]:
         스킬 디렉토리 경로 리스트
     """
     skills_dir = AGENT_DIR / "skills"
-    return [str(skills_dir)]
+    return [
+        str(skills_dir / "reporting"),
+        str(skills_dir / "finance"),
+    ]
 
 
 def get_mcp_server_config() -> dict:

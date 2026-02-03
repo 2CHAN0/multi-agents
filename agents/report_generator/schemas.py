@@ -17,6 +17,7 @@ class ReportInput(BaseModel):
     quantities: list[int] = Field(
         description="각 코드에 해당하는 수량 목록"
     )
+    instruction: str | None = None  # 사용자 추가 지침
 
 
 class ReportOutput(BaseModel):

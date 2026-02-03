@@ -33,6 +33,7 @@ from agents.report_generator.config import (
 from agents.report_generator.schemas import ReportInput, ReportOutput
 from agents.report_generator.tools.aggregate import aggregate_by_standard_code
 from agents.report_generator.tools.markdown import generate_markdown_report
+from agents.report_generator.tools.finance import get_exchange_rate
 
 # 전역 MCP 클라이언트
 mcp_client = None
@@ -70,7 +71,8 @@ async def process_report_request(input_data: ReportInput) -> ReportOutput:
     # 로컬 도구와 MCP 도구 결합
     all_tools = [
         aggregate_by_standard_code,
-        generate_markdown_report
+        generate_markdown_report,
+        get_exchange_rate
     ] + mcp_tools
     
     # DeepAgent 생성 (DeepAgents 표준 패턴)
@@ -88,7 +90,12 @@ async def process_report_request(input_data: ReportInput) -> ReportOutput:
 
 외부 코드 목록: {input_data.external_codes}
 수량 목록: {input_data.quantities}
+"""
 
+    if input_data.instruction:
+        user_message += f"\n추가 지침: {input_data.instruction}\n"
+
+    user_message += """
 1. 먼저 batch_convert_codes 도구로 외부 코드를 변환하세요.
 2. 그 다음 aggregate_by_standard_code로 수량을 집계하세요.
 3. 마지막으로 generate_markdown_report로 리포트를 생성하세요."""
