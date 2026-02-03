@@ -1,5 +1,5 @@
 ---
-name: code_mapping
+name: code-mapping
 description: 외부 코드를 내부 표준 코드로 변환하는 규칙과 방법을 정의하는 스킬
 ---
 # Code Mapping Skill

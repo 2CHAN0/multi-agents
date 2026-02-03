@@ -11,14 +11,14 @@
 **상황**: 사용자가 하나의 외부 코드 변환을 요청
 
 **Skills 조합**:
-1. `code_mapping` 스킬 참조
+1. `code-mapping` 스킬 참조
 2. `lookup_standard_code` 도구 사용
 3. JSON 형식으로 결과 반환
 
 **예시**:
 ```
 사용자: "EXT-PROD-001을 변환해줘"
-→ code_mapping 규칙 확인
+→ code-mapping 규칙 확인
 → lookup_standard_code("EXT-PROD-001") 실행
 → {"external_code": "EXT-PROD-001", "standard_code": "STD-001-A", ...} 반환
 ```
@@ -30,14 +30,14 @@
 **상황**: 사용자가 여러 외부 코드의 일괄 변환을 요청
 
 **Skills 조합**:
-1. `code_mapping` 스킬 참조
+1. `code-mapping` 스킬 참조
 2. 각 코드에 대해 `lookup_standard_code` 도구 사용
 3. JSON 배열 형식으로 결과 반환
 
 **예시**:
 ```
 사용자: "EXT-PROD-001, VENDOR-100을 변환해줘"
-→ code_mapping 규칙 확인
+→ code-mapping 규칙 확인
 → 각 코드에 대해 lookup_standard_code 실행
 → [{"external_code": "EXT-PROD-001", ...}, {"external_code": "VENDOR-100", ...}] 반환
 ```
@@ -49,14 +49,14 @@
 **상황**: 매핑 규칙에 없는 새로운 패턴의 코드 발견
 
 **Skills 조합**:
-1. `code_mapping` 스킬의 기본 변환 규칙 적용
+1. `code-mapping` 스킬의 기본 변환 규칙 적용
 2. 카테고리 X로 변환
 3. `/memories/new_patterns.md`에 패턴 기록
 
 **예시**:
 ```
 사용자: "UNKNOWN-999를 변환해줘"
-→ code_mapping의 기본 규칙 적용
+→ code-mapping의 기본 규칙 적용
 → {"external_code": "UNKNOWN-999", "standard_code": "STD-999-X", "category": "X"} 반환
 → /memories/new_patterns.md에 "UNKNOWN-999" 패턴 기록
 ```
