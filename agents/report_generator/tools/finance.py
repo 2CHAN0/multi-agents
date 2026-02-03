@@ -6,7 +6,10 @@ Retrieves financial data such as exchange rates using yfinance.
 
 import yfinance as yf
 from typing import Any
+from langchain.tools import tool
 
+
+@tool
 def get_exchange_rate(target_currency: str, base_currency: str = "USD") -> dict[str, Any]:
     """
     Get the current exchange rate between two currencies.
@@ -18,18 +21,10 @@ def get_exchange_rate(target_currency: str, base_currency: str = "USD") -> dict[
     Returns:
         A dictionary containing the exchange rate and metadata.
     """
-    # Yahoo Finance symbol format for pairs: e.g., KRW=X for USD to KRW
-    # For pairs not starting with USD, it might differ, but yfinance standard is usually BASE+TARGET=X or similar specific tickers.
-    # Common convention: if base is USD, target is KRW -> 'KRW=X' returns rate for USD -> KRW.
-    # if base is EUR, target is USD -> 'EURUSD=X'.
-    
-    # Simple logic for USD base
+    # Yahoo Finance symbol format
     if base_currency.upper() == "USD":
         symbol = f"{target_currency.upper()}=X"
     else:
-        # Fallback or more complex pair logic could be added here.
-        # For now, let's try direct concatenation which works for many major pairs or inverse.
-        # But yfinance typically uses 'KRW=X' for USD/KRW.
         symbol = f"{base_currency.upper()}{target_currency.upper()}=X"
 
     try:
@@ -61,3 +56,4 @@ def get_exchange_rate(target_currency: str, base_currency: str = "USD") -> dict[
             "error": str(e),
             "success": False
         }
+

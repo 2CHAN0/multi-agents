@@ -23,7 +23,7 @@ def get_model_config() -> dict:
         모델 설정 딕셔너리
     """
     return {
-        "model": "openai/gpt-5-nano",
+        "model": "google/gemini-3-flash-preview",
         "model_provider": "openai",
         "openai_api_key": os.getenv("OPENROUTER_API_KEY"),
         "openai_api_base": "https://openrouter.ai/api/v1",

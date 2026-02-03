@@ -141,9 +141,21 @@ def get_supported_patterns_tool() -> dict[str, str]:
 # ============================================================================
 
 if __name__ == "__main__":
-    # print 문을 stderr로 출력
+    import argparse
+    parser = argparse.ArgumentParser(description="Code Converter MCP Server")
+    parser.add_argument("--port", type=int, help="Port to run SSE server on (if not provided, runs on stdio)")
+    args = parser.parse_args()
+
+    # print 문을 stderr로 출력 (stdio 통신 방해 방지)
     print("🚀 Code Converter MCP Server (DeepAgents) 시작...", file=sys.stderr)
     print("📋 지원 패턴:", list(CODE_MAPPING_RULES.keys()), file=sys.stderr)
     print("📚 AGENTS.md: 비즈니스 규칙 로드됨", file=sys.stderr)
     print("🎯 Skills: 재사용 가능한 지침 로드됨", file=sys.stderr)
-    mcp.run()
+    
+    if args.port:
+        print(f"📡 Remote MCP Mode: Running SSE server on port {args.port}", file=sys.stderr)
+        mcp.settings.port = args.port
+        mcp.run(transport="sse")
+    else:
+        print("🔌 Local MCP Mode: Running on stdio", file=sys.stderr)
+        mcp.run()

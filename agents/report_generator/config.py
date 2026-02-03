@@ -24,7 +24,7 @@ def get_model_config() -> dict:
         모델 설정 딕셔너리
     """
     return {
-        "model": "openai/gpt-5-nano",
+        "model": "google/gemini-3-flash-preview",
         "model_provider": "openai",
         "openai_api_key": os.getenv("OPENROUTER_API_KEY"),
         "openai_api_base": "https://openrouter.ai/api/v1",
@@ -81,15 +81,28 @@ def get_skills_paths() -> list[str]:
 def get_mcp_server_config() -> dict:
     """
     MCP 서버 설정을 반환합니다.
+    환경 변수에 CODE_CONVERTER_URL이 있으면 Remote(SSE)로 연결하고, 없으면 Local(Stdio)로 실행합니다.
     
     Returns:
         MCP 서버 설정 딕셔너리
     """
-    return {
-        "code_converter": {
-            "command": "python",
-            "args": ["-m", "agents.code_converter.server"],
-            "cwd": str(PROJECT_ROOT),
-            "transport": "stdio",
+    remote_url = os.getenv("CODE_CONVERTER_URL")
+    
+    if remote_url:
+        # Remote (SSE) 방식
+        return {
+            "code_converter": {
+                "url": remote_url,
+                "transport": "sse",
+            }
         }
-    }
+    else:
+        # Local (Stdio) 자식 프로세스 방식
+        return {
+            "code_converter": {
+                "command": "python",
+                "args": ["-m", "agents.code_converter.server"],
+                "cwd": str(PROJECT_ROOT),
+                "transport": "stdio",
+            }
+        }

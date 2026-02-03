@@ -5,8 +5,10 @@ Markdown Report Generator
 """
 
 from typing import Any
+from langchain.tools import tool
 
 
+@tool
 def generate_markdown_report(
     aggregated_data: dict[str, int],
     conversion_details: list[dict]

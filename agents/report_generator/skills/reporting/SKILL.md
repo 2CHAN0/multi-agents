@@ -1,3 +1,7 @@
+---
+name: reporting
+description: 데이터를 집계하고 마크다운 리포트를 생성하는 방법을 정의하는 스킬
+---
 # Reporting Skill
 
 ## HOW: 리포트 생성 수행 방법

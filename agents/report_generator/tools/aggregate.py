@@ -6,8 +6,10 @@ Report Generator Tools
 
 from collections import defaultdict
 from typing import Any
+from langchain.tools import tool
 
 
+@tool
 def aggregate_by_standard_code(
     conversions: list[dict],
     quantities: list[int]
