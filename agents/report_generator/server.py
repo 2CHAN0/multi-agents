@@ -37,6 +37,7 @@ from agents.report_generator.schemas import ReportInput, ReportOutput
 from agents.report_generator.tools.aggregate import aggregate_by_standard_code
 from agents.report_generator.tools.markdown import generate_markdown_report
 from agents.report_generator.tools.finance import get_exchange_rate
+from agents.report_generator.tools.memory import save_user_preference
 
 from langgraph.checkpoint.memory import MemorySaver
 from langgraph.store.memory import InMemoryStore
@@ -88,7 +89,8 @@ async def process_report_request(input_data: ReportInput) -> dict:
     all_tools = [
         aggregate_by_standard_code,
         generate_markdown_report,
-        get_exchange_rate
+        get_exchange_rate,
+        save_user_preference
     ] + mcp_tools
     
     # DeepAgent 생성 (DeepAgents 표준 패턴)
@@ -220,9 +222,19 @@ async def resume_report(input_data: ResumeInput):
     all_tools = [
         aggregate_by_standard_code,
         generate_markdown_report,
-        get_exchange_rate
+        get_exchange_rate,
+        save_user_preference
     ] + mcp_tools
     
+    # 인터럽트 설정
+    interrupt_on = {"get_exchange_rate": True}
+    
+    # 수정(edit) 결정인 경우, 해당 도구의 인터럽트를 비활성화하여 무한 루프 방지
+    if input_data.decision == "edit":
+        # 현재 코드에서는 get_exchange_rate만 인터럽트 대상이므로 이를 수정 중이라면 제외
+        if "get_exchange_rate" in interrupt_on:
+             del interrupt_on["get_exchange_rate"]
+
     agent = create_deep_agent(
         model=model,
         tools=all_tools,
@@ -231,7 +243,7 @@ async def resume_report(input_data: ResumeInput):
         skills=skills_paths,
         backend=backend,
         checkpointer=checkpointer,
-        interrupt_on={"get_exchange_rate": True}  # 환율 조회 시 인터럽트
+        interrupt_on=interrupt_on
     )
     
     config = {"configurable": {"thread_id": input_data.thread_id}}
