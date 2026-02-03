@@ -1,3 +1,7 @@
+---
+name: finance
+description: 환율 정보를 조회하고 적용하는 방법을 정의하는 스킬
+---
 # Finance Skill
 
 ## HOW: 환율 정보 처리 방법
